@@ -1,0 +1,44 @@
+\documentclass[
+  bibliography=totoc,     % Literatur im Inhaltsverzeichnis
+  captions=tableheading,  % Tabellenüberschriften
+  titlepage=firstiscover, % Titelseite ist Deckblatt
+]{scrartcl}
+
+\input{header/packages.tex}
+
+% Quellendatenbank
+\addbibresource{bib/lit.bib}
+\addbibresource{bib/programme.bib}
+
+\author{%
+  AUTOR A\\%
+  \href{mailto:authorA@udo.edu}{authorA@udo.edu}%
+  \and%
+  AUTOR B\\%
+  \href{mailto:authorB@udo.edu}{authorB@udo.edu}%
+}
+\publishers{TU Dortmund – Fakultät Physik}
+
+\subject{VERSUCH NUMMER}
+\title{TITEL}
+\date{%
+  Durchführung: DATUM
+  \hspace{3em}
+  Abgabe: DATUM
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+\input{content/theorie.tex}
+\input{content/durchfuehrung.tex}
+\input{content/auswertung.tex}
+\input{content/diskussion.tex}
+
+\printbibliography{}
+
+\end{document}
