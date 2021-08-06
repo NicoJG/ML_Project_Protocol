@@ -1,7 +1,9 @@
 \documentclass[
+  fontsize=12pt,
   bibliography=totoc,     % Literatur im Inhaltsverzeichnis
   captions=tableheading,  % Tabellenüberschriften
   titlepage=firstiscover, % Titelseite ist Deckblatt
+  parskip=half,           % Absätze haben kleinen Abstand und werden nicht eingerückt
 ]{scrartcl}
 
 \input{header/packages.tex}
@@ -23,7 +25,11 @@
 
 \begin{document}
 
-\maketitle
+\begin{spacing}{1}
+  % recommendation in the koma script documentation
+  % page 40
+  \maketitle
+\end{spacing}
 \thispagestyle{empty}
 \tableofcontents
 \newpage

@@ -13,11 +13,18 @@
 
 % Fonteinstellungen
 \usepackage{fontspec}
-% Latin Modern Fonts werden automatisch geladen
-% Alternativ zum Beispiel:
-%\setromanfont{Libertinus Serif}
-%\setsansfont{Libertinus Sans}
-%\setmonofont{Libertinus Mono}
+
+% Font Vorgaben:
+\setmainfont{Arial}
+\newfontfamily\arialfamily{Arial}
+\addtokomafont{disposition}{\arialfamily}
+% make sure Microsoft Fonts are installed
+% on WSL you can just link the Windows Fonts directory in the Ubuntu Fonts directory
+% https://www.hunterwebs.com.au/blog/how-to-sync-windows-fonts-with-wsl-windows-subsystem-for-linux/
+% command for this: ln -s /mnt/c/windows/fonts ~/.fonts
+
+% Zeilenabstand Vorgabe
+\usepackage[onehalfspacing]{setspace}
 
 % Wenn man andere Schriftarten gesetzt hat,
 % sollte man das Seiten-Layout neu berechnen lassen
@@ -48,34 +55,28 @@
 \setmathfont{XITS Math}[range={cal, bfcal}, StylisticSet=1]
 
 % Zahlen und Einheiten
-\usepackage[
-  locale=DE,                   % deutsche Einstellungen
-  separate-uncertainty=true,   % immer Unsicherheit mit \pm
-  per-mode=symbol-or-fraction, % / in inline math, fraction in display math
-]{siunitx}
-
-% chemische Formeln
-\usepackage[
-  version=4,
-  math-greek=default, % ┐ mit unicode-math zusammenarbeiten
-  text-greek=default, % ┘
-]{mhchem}
+% \usepackage[
+%   locale=DE,                   % deutsche Einstellungen
+%   separate-uncertainty=true,   % immer Unsicherheit mit \pm
+%   per-mode=symbol-or-fraction, % / in inline math, fraction in display math
+% ]{siunitx}
 
 % richtige Anführungszeichen
 \usepackage[autostyle]{csquotes}
-
-% schöne Brüche im Text
-\usepackage{xfrac}
 
 % Standardplatzierung für Floats einstellen
 \usepackage{float}
 \floatplacement{figure}{htbp}
 \floatplacement{table}{htbp}
 
+% figures in text
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions#Wrapping_text_around_figures
+\usepackage{wrapfig}
+
 % Floats innerhalb einer Section halten
 \usepackage[
   section, % Floats innerhalb der Section halten
-  below,   % unterhalb der Section aber auf der selben Seite ist ok
+  %below,   % unterhalb der Section aber auf der selben Seite ist ok
 ]{placeins}
 
 % Seite drehen für breite Tabellen: landscape Umgebung
@@ -87,6 +88,7 @@
   font=small,          % Schrift etwas kleiner als Dokument
   width=0.9\textwidth, % maximale Breite einer Caption schmaler
 ]{caption}
+
 % subfigure, subtable, subref
 \usepackage{subcaption}
 
@@ -112,6 +114,7 @@
   pdfcreator={},  % ┐ PDF-Attribute säubern
   pdfproducer={}, % ┘
 ]{hyperref}
+
 % erweiterte Bookmarks im PDF
 \usepackage{bookmark}
 
