@@ -1,12 +1,162 @@
 \section{Vorgehensweise}
 \label{sec:Vorgehensweise}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+Ziel dieses Projektes war es Wasser auf Satellitenbildern zu erkennen.
+Dazu wurden zwei Methoden des maschinellen Lernens für die Segmentierung verwendet.
+Ein \enquote{Convolutional Neural Network} stellte dabei die Hauptmethode dar 
+und ein \enquote{Random Forest} stellte dabei eine Alternativmethode zum Vergleich dar.
+Für beide Methoden wurde das Framework \enquote{TensorFlow} verwendet.\cite{tensorflow}
+Die Metrik, die benutzt wurde um die Methoden zu evaluieren, war die Genauigkeit(zu englisch \enquote{accuracy}), 
+also der Anteil der richtig zugeordneten Pixel.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+\subsection{Vorverarbeitung}
+\label{ssec:Vorverarbeitung}
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. 
+Der in \autoref{sec:Datensatz} beschriebene Datensatz wurde in drei Teildatensätze aufgeteilt,
+den Trainings-, den Validierungs- und den Testdatensatz.
+Die Größen dieser Datensätze sind in \autoref{tab:Teildatensätze} angegeben.
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+\begin{table}
+    \centering
+    \caption{Größen der Teildatensätze vom Gesamtdatensatz mit 57931 Satellitenbildern.}
+    \label{tab:Teildatensätze}
+    \begin{tabular}{l c c c}
+        \toprule 
+        & Trainingsdaten & Validierungsdaten & Testdaten \\ 
+        \midrule 
+        Anzahl & 39392 & 6952 & 11587 \\
+        Anteil & 68\% & 12\% & 20\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. 
+Außerdem wurden die Bilder zu einer Auflösung von 128 x 128 Pixel skaliert, 
+da so nicht viel Information verloren ging und viel Rechenzeit und Rechenleistung eingespart werden konnte.
+Die Pixel der Maskenbilder wurden zu binären Werten umgerechnet, wobei 1 Wasser und 0 kein Wasser kennzeichnet
+und die drei Farbkanäle Satellitenbilder wurden auf einen Pixelwert zwischen 0 und 1 normiert. 
+
+\subsection{Hauptmethode: \enquote{Convolutional Neural Network}}
+\label{ssec:Hauptmethode}
+
+Das verwendete Neuronale Netzwerk ist vollständig \enquote{convolutional} und orientiert sich an der häufig für Segmentierung verwendeten \enquote{U-Net}-Struktur.\cite{ronneberger2015unet}
+Hier wird in der ersten Hälfte des Netzwerks zwischen den \enquote{convolutional} Lagen das Bild in durch maximales \enquote{Pooling} verkleinert (halbierte Kantenlänge) 
+und in der zweiten Hälfte das Bild zwischen den \enquote{convolutional} Lagen durch transponierte \enquote{convolutional} Lagen vergrößert (verdoppelte Kantenlänge).
+Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet.
+Ein Beispiel eines solchen \enquote{U-Net} ist in \autoref{fig:unet} dargestellt.
+Außerdem wurde zwischen den beiden \enquote{convolutional} Lagen einer Ebene das Netzwerk mithilfe von \enquote{Dropout} regularisiert.
+Ein weiterer Unterschied zum dargestellten \enquote{U-Net} ist, dass bei den \enquote{convolutional} Lagen ein \enquote{Padding} von \enquote{same} statt \enquote{valid} verwendet wurde.
+
+Als Aktivierungsfunktion wurde für alle \enquote{convolutional} Lagen die \enquote{ReLU}-Funktion und für die letzte Lage die \enquote{Sigmoid}-Funktion verwendet.
+Der Optimierer \enquote{Adam} hat dabei die Verlustfunktion der binären Kreuzentropie minimiert.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/unet.png}
+    \caption{Visualisierung eines \enquote{U-Net}, %
+    wobei jede Box einem Mehrkanal-Bild entspricht. Die Anzahl an Kanäle ist über der Box angegeben und die Anzahl der Pixel ist neben der Box angegeben. %
+    Jeder Pfeil entspricht der entsprechenden Operation.\cite{ronneberger2015unet}}
+    \label{fig:visual_model}
+\end{figure}
+
+Die besten Hyperparameter und die beste Struktur des Netzwerks wurde mithilfe einer zufälligen Suche ermittelt.
+Das Netzwerk wurde für 100 verschiedene Kombinationen der Hyperparameter auf einem kleinen Trainingsdatensatz von 3000 Satellitenbildern trainiert
+und dann auf einem kleinen Validierungsdatensatz von ebenfalls 3000 Satellitenbildern evaluiert.
+Das Ergebnis der Hyperparametersuche ist in \autoref{fig:grid_search} dargestellt.
+Variiert wurden folgende Hyperparameter:
+
+\begin{itemize}
+    \item \enquote{filter\_start}: Anzahl der Filter der \enquote{convolutional} Lagen der ersten und letzten Ebene, wobei die Filter pro Ebene verdoppelt wurden
+    \item \enquote{filter\_levels}: Anzahl der Ebenen
+    \item \enquote{kernel\_size}: Größe der Faltungsmatrizen aller \enquote{convolutional} Lagen
+    \item \enquote{kernel\_initializer}: Methode der Matrixinitialisierung aller \enquote{convolutional} Lagen
+    \item \enquote{dropout\_start}: Stärke des \enquote{Dropout} der ersten und letzten Ebene, wobei die Stärke jeweils nach zwei Ebenen um 0,1 erhöht wurde
+    \item \enquote{learning\_rate}: Lernrate des verwendeten Optimierers \enquote{Adam}
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/grid_search.png}
+    \caption{Zufällige Suche der besten Hyperparameter}
+    \label{fig:grid_search}
+\end{figure}
+
+Vor dieser systematischen Suche wurden weitere Hyperparameter variiert, allerdings erwies sich das zuvor beschriebene Neuronale Netzwerk als am besten geeignet
+und die systematischen Suche beschränkte sich auf die wichtigsten Parameter.
+
+Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,3\% auf dem Validierungsdatensatz.
+Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Folgenden anhand der Visualisierung in \autoref{fig:visual_model} detailliert beschrieben.
+Die Aufzählungen im Folgenden sind in \autoref{fig:visual_model} von links nach rechts der entsprechenden Lage zugeordnet.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/visual_model.png}
+    \caption{Visualisierung des verwendeten Convolutional Neural Network}
+    \label{fig:visual_model}
+\end{figure}
+
+\begin{itemize}
+    \item \enquote{InputLayer} Shape: (..., 128, 128, 3) 
+    \item \enquote{Conv2D}:
+    \item[-] Filter Anzahl: 18, 18, 36, 36, 72, 72, 144, 144, 72, 72, 36, 36, 18, 18, 1
+    \item[-] Kernel Größe: 3 x 3
+    \item[-] Kernel Initialisierungs-Methode: \enquote{he\_normal}
+    \item[-] Padding: \enquote{same} 
+    \item[-] Aktivierungsfunktion: ReLU (letzte: Sigmoid)
+    \item \enquote{Dropout} Stärke: 0.1779, 0.1779, 0.2779, 0.2779, 0.2779, 0.1779, 0.1779
+    \item \enquote{MaxPooling2D} Größe: 2 x 2
+    \item \enquote{Conv2DTranspose}:
+    \item[-] Filter Anzahl: 72, 36, 18
+    \item[-] Kernel Größe: 2 x 2
+    \item[-] Aktivierungsfunktion: keine
+    \item \enquote{Concatenate}: Verkettet Ausgabe vor \enquote{MaxPooling2D} mit Ausgabe nach \enquote{Conv2DTranspose} der gleichen Ebene
+    \item Verlustfunktion: binäre Kreuzentropie
+    \item \enquote{Adam}-Lernrate: 0.003795
+    \item \enquote{Batch}-Größe beim Training: 128
+\end{itemize}
+
+Der Fortschritt während des Trainings ist in \autoref{fig:train_hist} dargestellt.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/loss_curve.png}
+        \caption{Verlustfunktion}
+        \label{fig:loss_curve}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/acc_curve.png}
+        \caption{Genauigkeit}
+        \label{fig:acc_curve}
+    \end{subfigure}
+    \caption{Plots der Verlustfunktion bzw. Genauigkeit während dem Training je nach Epoche auf Trainings- und Validierungsdatensatz}
+    \label{fig:train_hist}
+\end{figure}
+
+Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde ein die Genauigkeit auf dem Validierungsdatensatz
+für verschiedene Schwellwerte berechnet, ab denen ein Pixel als Wasser gewertet wird.
+Dies ist in \label{fig:threshold} dargestellt.
+
+\begin{figure}
+    \centering
+    \includegraphics[0.5\textwidth]{images/threshold.png}
+    \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellwert}
+    \label{fig:threshold}
+\end{figure}
+
+\subsection{Alternativmethode: \enquote{Random Forest}}
+\label{ssec:Alternativmethode}
+
+Zum Vergleich mit dem Neuronalen Netzwerks wurde eine Pixelweise Klassifikation mithilfe eines \enquote{Random Forest} verwendet.
+Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet, allerdings wurde dies um das Framework \enquote{TensorFlow Decision Forests} erweitert.\cite{tfdf}
+Dieser \enquote{Random Forest} besteht aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 haben.
+
+Hierfür wurden zunächst jedem Pixel der Satellitenbilder einige Attribute extrahiert.
+Auf jedem Farbkanal wurde der Betrag des Gradienten berechnet.
+Dann wurde vom Satellitenbild und dem Bild der Gradienten ein Graustufen Bild erzeugt.
+All diese 8 Attribute wurden dem \enquote{Random Forest} pixelweise übergeben.
+
+Aufgrund von Arbeitsspeicher- und Rechenzeit-Limitierungen konnte nicht der gesamte Trainingsdatensatz verwendet werden.
+Aus jedem Bild im Trainingsdatensatz wurden 25 zufällige Pixel verwendet und so wurde der \enquote{Random Forest} auf einer Millionen Pixel trainiert.
+Der Validierungs- und Testdatensatz blieb jedoch gleich.
