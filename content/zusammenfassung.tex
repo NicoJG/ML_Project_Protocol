@@ -3,20 +3,20 @@
 
 Die Ergebnisse beider verwendeten Methoden zur Segmentierung von Gewässern auf Satellitenbildern waren ausreichend
 und übertrafen teilweise unsere Erwartungen vor dem Projekt.
-Erst während dem Projekt erkannten wir, dass einige der Masken im Datensatz fehlerhaft sind.
+Erst während des Projektes erkannten wir, dass einige der Masken im Datensatz fehlerhaft waren.
 Auch erkannten wir, dass ein paar der Satellitenbilder für eine Segmentierung unbrauchbar waren. (z.B. Bilder von Wolken)
-Trotz der schlechten Daten, die zum Training benutzt wurden, wurden gute Ergebnisse erzielt 
+Trotz der schlechten Daten, die zum Training verwendet wurden, wurden gute Ergebnisse erzielt 
 und die vorhergesagten Masken waren häufig besser als die Masken des Datensatzes.
 Die erzielten Genauigkeiten der Hauptmethode von etwa 93\% und der Alternativmethode von etwa 89\% lassen sich allerdings nicht näher beurteilen, 
-da nicht klar ist welche Genauigkeit die Masken im Datensatz erreichen.
-Hierfür wäre eine Manuelle Überprüfung notwendig.
+da nicht klar ist welche Genauigkeit die Masken im Datensatz erreichen und diese Masken als Grundwahrheit angenommen wurden.
+Hierfür wäre eine manuelle Überprüfung notwendig.
 
-Der Vergleich des Convolutional Neural Network zum Random Forest zeigt deulich, dass für dieses Problem ersteres besser geeignet war.
+Der Vergleich des Convolutional Neural Network zum Random Forest zeigte deutlich, dass für dieses Problem ersteres besser geeignet war.
 Zusätzlich zu den besseren Ergebnissen war das Convolutional Neural Network deutlich sparsamer mit der benötigten Rechenleistung 
-und sogar die Vorhersagen gingen deutlich schneller als bei dem Random Forest.
-Auch ist zu sehen, dass ein Convolutional Neural Network Beziehungen zwischen den Pixeln auswertet, was bei einem Random Forest nicht möglich ist.
+und sogar die Vorhersagen wurden deutlich schneller erzeugt als bei dem Random Forest.
+Auch ist zu sehen, dass das Convolutional Neural Network Beziehungen zwischen den Pixeln auswertete, was bei dem Random Forest nicht möglich war.
 
-Sicherlich ist das verwendete Modell nicht perfekt, aber es zeigt, dass ein so komplexes und vielseitiges Problem 
+Sicherlich war das verwendete Modell nicht perfekt, aber es zeigte, dass ein so komplexes und vielseitiges Problem 
 wie die Wassererkennung auf Satellitenbildern mit Deep Learning gelöst werden kann.
 Eine Überwachung der Ausgabe von Neuronalen Netzen durch Menschen ist allerdings noch zu empfehlen.
 

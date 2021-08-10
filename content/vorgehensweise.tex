@@ -35,18 +35,21 @@ da so nicht viel Information verloren ging und viel Rechenzeit und Rechenleistun
 Die Pixel der Maskenbilder wurden zu binären Werten umgerechnet, wobei 1 Wasser und 0 kein Wasser kennzeichnet
 und die drei Farbkanäle Satellitenbilder wurden auf einen Pixelwert zwischen 0 und 1 normiert. 
 
+Alle Datensätze wurden in \enquote{Batches} aufgeteilt und aus Arbeitsspeichergründen während des Abrufens in den Arbeitsspeicher geladen.
+Dafür wurde eine \enquote{Batch}-Größe von 128 Satellitenbildern verwendet.
+
 \subsection{Hauptmethode: \enquote{Convolutional Neural Network}}
 \label{ssec:Hauptmethode}
 
 Das verwendete Neuronale Netzwerk ist vollständig \enquote{convolutional} und orientiert sich an der häufig für Segmentierung verwendeten \enquote{U-Net}-Struktur.\cite{ronneberger2015unet}
-Hier wird in der ersten Hälfte des Netzwerks zwischen den \enquote{convolutional} Lagen das Bild in durch maximales \enquote{Pooling} verkleinert (halbierte Kantenlänge) 
-und in der zweiten Hälfte das Bild zwischen den \enquote{convolutional} Lagen durch transponierte \enquote{convolutional} Lagen vergrößert (verdoppelte Kantenlänge).
-Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet.
 Ein Beispiel eines solchen \enquote{U-Net} ist in \autoref{fig:unet} dargestellt.
+Hier wird in der ersten Hälfte des Netzwerks zwischen den \enquote{convolutional} Lagen das Bild durch \enquote{maximales Pooling} verkleinert (halbierte Kantenlänge) 
+und in der zweiten Hälfte das Bild zwischen den \enquote{convolutional} Lagen durch transponiert-\enquote{convolutional} Lagen vergrößert (verdoppelte Kantenlänge).
+Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet.
 
-Allerdings unterscheidet sich das verwendete Netzwerk in einigen Hyperparametern, wie z.B. die Filteranzahlen und die Pixelanzahlen.
+Allerdings unterscheidet sich das verwendete Netzwerk in einigen Hyperparametern, wie z.B. den Filteranzahlen und den Pixelanzahlen zu dem gezeigten \enquote{U-Net}.
 Außerdem wurde zwischen den beiden \enquote{convolutional} Lagen einer Ebene das Netzwerk mithilfe von \enquote{Dropout} regularisiert.
-Ein weiterer Unterschied zum dargestellten \enquote{U-Net} ist, dass bei den \enquote{convolutional} Lagen ein \enquote{Padding} von \enquote{same} statt \enquote{valid} verwendet wurde.
+Ein weiterer Unterschied ist, dass bei den \enquote{convolutional} Lagen ein \enquote{Padding} von \enquote{same} statt \enquote{valid} verwendet wurde.
 
 Als Aktivierungsfunktion wurde für alle \enquote{convolutional} Lagen die \enquote{ReLU}-Funktion und für die letzte Lage die \enquote{Sigmoid}-Funktion verwendet.
 Der Optimierer \enquote{Adam} hat dabei die Verlustfunktion der binären Kreuzentropie minimiert.
@@ -103,13 +106,13 @@ Variiert wurden folgende Hyperparameter:
     }
 \end{table}
 
-Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem Testdatensatz.
+Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem kleinen Testdatensatz.
 Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Anhang anhand einer Visualisierung detailliert beschrieben. (siehe \autoref{fig:visual_model})
 
-Der Fortschritt während des Trainings der 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
-Hier lässt sich erkennen, dass das Modell etwas besser auf den Trainingsdaten abschneidet, aber eine Überanpassung ist dies nicht.
-Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und so unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
-und ein niedriger Dropout wie hier reicht für die Regularisierung aus.
+Das Modell wurde mehrfach auf dem Trainingsdatensatz trainiert und der beste Durchlauf nach 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
+Hier ist zu erkennen, dass das Modell etwas besser auf den Trainingsdaten abschnitt, allerdings ist nicht von einer Überanpassung auszugehen.
+Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und vielen deutlich unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
+und ein niedriger \enquote{Dropout} wie hier reicht für die Regularisierung aus.
 Die Hyperparametersuche zeigte auch, dass ein zu hoher Dropout nur zu schlechteren Ergebnissen führte.
 Die \enquote{Zackigkeit} der Kurven in \autoref{fig:train_hist} lässt sich dadurch erklären, dass eine \enquote{Batch}-Größe von 128 Bildern verwendet wurde und ein großer Teil des Trainings so gar nicht in den Plots zu erkennen ist.
 Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten nicht möglich.
@@ -133,7 +136,7 @@ Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten n
 \end{figure}
 
 Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde die Genauigkeit auf dem Validierungsdatensatz
-für verschiedene Schwellwerte berechnet, ab denen ein Pixel als Wasser gewertet wird und der beste Schwellwert wird verwendet.
+für verschiedene Schwellwerte, ab denen ein Pixel als Wasser gewertet wird, berechnet und der beste Schwellwert wurde verwendet.
 Hier ergab sich als bester Schwellwert 0,54.
 Dies ist in \autoref{fig:threshold} dargestellt.
 
@@ -147,9 +150,9 @@ Dies ist in \autoref{fig:threshold} dargestellt.
 \subsection{Alternativmethode: \enquote{Random Forest}}
 \label{ssec:Alternativmethode}
 
-Zum Vergleich mit dem Neuronalen Netzwerks wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} verwendet.
-Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet, allerdings wurde dies um das Framework \enquote{TensorFlow Decision Forests} erweitert.\cite{tfdf}
-Dieser \enquote{Random Forest} besteht aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 haben.
+Zum Vergleich mit dem Neuronalen Netzwerk wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} durchgeführt.
+Dieser \enquote{Random Forest} bestand aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 hatten.
+Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet.\cite{tfdf}
 
 Hierfür wurden zunächst jedem Pixel der Satellitenbilder einige Attribute extrahiert.
 Auf jedem Farbkanal wurde der Betrag des Gradienten berechnet.

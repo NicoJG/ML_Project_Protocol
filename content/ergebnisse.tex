@@ -19,8 +19,8 @@ In \autoref{tab:accuracy} sind alle erreichten Genauigkeiten aufgelistet.
     \end{tabular}
 \end{table}
 
-Hier ist deutlich zu erkennen, dass beide von uns gewählten Methoden gute Ergebnisse erzielt haben, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielt.
-Eine genauere Aussage über die Ergebnisse lässt sich über eine Konfusionsmatrix treffen. Diese ist in \autoref{fig:confusionmatrix} dargestellt.
+Hier ist deutlich zu erkennen, dass beide von uns gewählten Methoden gute Ergebnisse erzielten, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielte.
+Eine genauere Analyse der Ergebnisse ist über eine Konfusionsmatrix erreichbar und diese ist in \autoref{fig:confusionmatrix} dargestellt.
 
 \begin{figure}
     \centering
@@ -41,7 +41,7 @@ Eine genauere Aussage über die Ergebnisse lässt sich über eine Konfusionsmatr
 \end{figure}
 
 Um die Methoden allerdings tatsächlich evaluieren zu können ist es notwendig einige Beispiele der vorhergesagten Masken zu betrachten.
-Dazu ist in \autoref{fig:beispiele_cnn} die Ausgabe des Convolutional Neural Networks mit und ohne binäre Darstellung mittels des Schwellwerts dargestellt.
+Dazu ist in \autoref{fig:beispiele_cnn} die Ausgabe des Convolutional Neural Network mit und ohne binäre Darstellung mittels des Schwellwertes dargestellt.
 Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradienten des Satellitenbildes und die Ausgabe des Random Forest zu sehen.
 
 \begin{figure}
@@ -65,9 +65,9 @@ Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradi
     \label{fig:beispiele_rndf}
 \end{figure}
 
-Schon hier lässt sich erkennen, dass die Alternativmethode deutlich mehr Rauschen aufgrund der pixelweisen Klassifizierung hat.
-Die Hauptmethode kann nicht alle Pixel eindeutig zuordnen und vor Allem Ränder oder schwer zu klassifizierende Stellen erhalten Werte die eher mittig zwischen 0 und 1 liegen.
-Auch ist schon zu sehen, dass die gegebene Maske nicht perfekt ist und teilweise Gewässer gar nicht oder nur grob markiert.
+Schon hier lässt sich erkennen, dass die Alternativmethode deutlich mehr Rauschen aufgrund der pixelweisen Klassifizierung erzeugte.
+Die Hauptmethode konnte nicht alle Pixel eindeutig zuordnen und vor Allem Ränder oder schwer zu klassifizierende Stellen erhielten Werte die eher mittig zwischen 0 und 1 liegen.
+Auch ist schon zu sehen, dass die gegebene Maske nicht perfekt war und teilweise Gewässer gar nicht oder nur grob markiert waren.
 
 Um weitere Erkenntnisse zu den beiden Methoden zu bekommen, werden in \autoref{fig:vergleich} die Vorhersagen beider Methoden miteinander verglichen.
 Weitere Beispiele sind im Anhang in \autoref{fig:bsp} und in \autoref{fig:bsp_bad} dargestellt.
@@ -75,21 +75,23 @@ Weitere Beispiele sind im Anhang in \autoref{fig:bsp} und in \autoref{fig:bsp_ba
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{images/vergleich.png}
-    \caption{Beispiele zum Vergleich der Hauptmethode zur Alternativmethode.\\ \copyright Mapbox, \copyright OpenStreetMap}
+    \caption{Beispiele zum Vergleich der Hauptmethode zur Alternativmethode. %
+    Aufgezeigt sind (von rechts nach links) das Satellitenbild, die Maske im Datensatz, die Vorhersage des Convolutional Neural Network und die Vorhersage des Random Forest.%
+    \\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:vergleich}
 \end{figure}
 
 Häufig ist die gegebene Maske nicht sehr detailliert 
 und obwohl beide Modelle auf diesen fehlerhaften Daten trainiert wurden,
-werden die Grenzen der Gewässer häufig klar erkannt.
+wurden die Grenzen der Gewässer häufig klar erkannt.
 Aufgrund dieser fehlerhaften gegebenen Masken war auch eine Genauigkeit von 100\% nicht erreichbar.
 
 In \autoref{fig:bsp_bad} sind zusätzlich noch einige Beispiele aufgezeigt, 
-bei denen die Segmentierung nicht gut funktioniert hat 
-oder die gegebene Maske auch falsch ist.
-Probleme sind z.B. Wolken, Ebbe und Flut, Felder, Sumpfgebiete oder sonstige auch für den Menschen schwer zu erkennende Gewässer.
-Um tatsächlich alle Probleme sehen zu können, müssten deutlich mehr Bilder gezeigt werden, dafür ist allerdings in diesem Bericht kein Platz.
+bei denen die Segmentierung nicht gut funktionierte 
+oder die gegebene Maske falsch war.
+Probleme waren z.B. Wolken, Ebbe und Flut, Felder, Sumpfgebiete, Schnee oder sonstige auch für den Menschen schwer zu erkennende Gewässer.
+Um tatsächlich alle Probleme sehen zu können, müssten deutlich mehr Bilder gezeigt werden, dies würde allerdings den Rahmen dieses Berichtes sprengen.
 
-Teilweise ist nicht erklärbar warum die Algorithmen Wasser falsch erkennen.
-Häufig entstehen Fehler an Stellen, die auch ein Mensch nicht erkennen könnte, aber manchmal werden eindeutige Kanten nicht erkannt.
-Einige der Fehler sind sicherlich auf die niedrige Auflösung von 128x128 Pixel zurückzuführen, aber die meisten Gewässer waren auch mit dieser Auflösung zu erkennen.
+Teilweise ist nicht erklärbar warum die Algorithmen Wasser falsch erkannten.
+Häufig entstanden Fehler an Stellen, die auch ein Mensch nicht erkennen könnte, aber manchmal wurden selbst eindeutige Kanten nicht richtig erkannt.
+Einige der Fehler waren sicherlich auf die niedrige Auflösung von 128x128 Pixel zurückzuführen, aber die meisten Gewässer waren auch mit dieser Auflösung klar zu erkennen.
