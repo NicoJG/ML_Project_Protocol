@@ -12,45 +12,79 @@ In \autoref{tab:accuracy} sind alle erreichten Genauigkeiten aufgelistet.
         \toprule 
         Methode & Trainingsdaten & Validierungsdaten & Testdaten \\ 
         \midrule 
-        Convolutional Neural Network & 93,5\% & 93,5\% & 93,5\% \\
-        Random Forest & 89,6\% & 89,6\% & 89,6\% \\
+        Convolutional Neural Network \\ (standard Schwellwert 0,50) & 93,56\% & 93,05\% & 93,30\% \\
+        Convolutional Neural Network \\ (bester Schwellwert 0,54) & 93,58\% & 93,07\% & 93,32\% \\
+        Random Forest & 89,40\% & 89,09\% & 89,37\% \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-Hier ist deutlich zu erkennen, dass beide von uns gewählten gute Ergebnisse erzielt haben, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielt.
-Um die Methoden allerdings tatsächlich evaluieren zu können ist es notwendig einige Beispiele der vorhergesagten Masken zu betrachten.
-Diese Beispiele sind in \autoref{fig:beispiele_cnn} für die Hauptmethode und in \autoref{fig:beispiele_rndf} für die Alternativmethode zu sehen.
+Hier ist deutlich zu erkennen, dass beide von uns gewählten Methoden gute Ergebnisse erzielt haben, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielt.
+Eine genauere Aussage über die Ergebnisse lässt sich über eine Konfusionsmatrix treffen. Diese ist in \autoref{fig:confusiomatrix} dargestellt.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{images/placeholder.png}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/cm_cnn.png}
+        \caption{Hauptmethode}
+        \label{fig:cm_cnn}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/cm_rndf.png}
+        \caption{Alternativmethode}
+        \label{fig:cm_rndf}
+    \end{subfigure}
+    \caption{Konfusionsmatrizen der Vorhersagen der verwendeten Methoden auf dem Testdatensatz}
+\end{figure}
+
+Um die Methoden allerdings tatsächlich evaluieren zu können ist es notwendig einige Beispiele der vorhergesagten Masken zu betrachten.
+Dazu ist in \autoref{fig:beispiele_cnn} die Ausgabe des Convolutional Neural Networks mit und ohne binäre Darstellung mittels des Schwellwerts dargestellt.
+Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradienten des Satellitenbildes und die Ausgabe des Random Forest zu sehen.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/bsp_cnn.png}
     \caption{Beispiele der Vorhersagen des Convolutional Neural Network. %
     Aufgezeigt ist zu einem Satellitenbild die Maske aus dem Datensatz und %
     die vorhergesagte Maske mit und ohne binärisierung über den Schwellwert. %
-    Außerdem sind die zugehörigen Länder aufgelistet.}
+    Außerdem sind die zugehörigen Länder aufgelistet.\\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:beispiele_cnn}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{images/placeholder.png}
+    \includegraphics[width=0.8\textwidth]{images/bsp_rndf.png}
     \caption{Beispiele der Vorhersagen des Random Forest. %
     Aufgezeigt ist zu einem Satellitenbild das Bild der Gradienten, %
     die Maske aus dem Datensatz und %
-    die vorhergesagte Maske mit binärisierung über den Schwellwert. %
-    Außerdem sind die zugehörigen Länder aufgelistet.}
+    die vorhergesagte Maske. %
+    Außerdem sind die zugehörigen Länder aufgelistet.\\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:beispiele_rndf}
 \end{figure}
 
-Es ist zu erkennen, dass die Ergebnisse teilweise besser sind als die gegebene Maske.
-%%
-%% Ergebnisse beschreiben
-%%
+Schon hier lässt sich erkennen, dass die Alternativmethode deutlich mehr Rauschen aufgrund der pixelweisen Klassifizierung hat.
+Die Hauptmethode kann nicht alle Pixel eindeutig zuordnen und vor Allem Ränder oder schwer zu klassifizierende Stellen erhalten Werte die eher mittig zwischen 0 und 1 liegen.
+Auch ist schon zu sehen, dass die gegebene Maske nicht perfekt ist und teilweise Gewässer gar nicht oder nur grob markiert.
 
-Im Vergleich der Alternativmethode mit der Hauptmethode ist deutlich zu erkennen, 
-dass die Alternativmethode pixelweise stattgefunden hat und die Vorhersagen haben ein gewisses Rauschen.
-%%
-%% Alternativ Ergebnisse beschreiben
-%%
+Um weitere Erkenntnisse zu den beiden Methoden zu bekommen, werden in \autoref{fig:vergleich} die Vorhersagen beider Methoden miteinander verglichen.
+Weitere Beispiele sind im Anhang in \autoref{fig:bsp} und in \autoref{fig:bsp_bad} dargestellt.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/vergleich.png}
+    \caption{Beispiele zum Vergleich der Hauptmethode zur Alternativmethode.\\ \copyright Mapbox, \copyright OpenStreetMap}
+    \label{fig:vergleich}
+\end{figure}
+
+Häufig ist die gegebene Maske nicht sehr detailliert 
+und obwohl beide Modelle auf diesen fehlerhaften Daten trainiert wurden,
+werden die Grenzen der Gewässer häufig klar erkannt.
+Aufgrund dieser fehlerhaften gegebenen Masken war auch eine Genauigkeit von 100\% nicht erreichbar.
+
+In \autoref{fig:bsp_bad} sind zusätzlich noch einige Beispiele aufgezeigt, 
+bei denen die Segmentierung nicht gut funktioniert hat 
+oder die gegebene Maske auch falsch ist.
+Probleme sind z.B. Wolken, Ebbe und Flut, Felder, Sumpfgebiete oder sonstige auch für den Menschen schwer zu erkennende Gewässer.
+Um tatsächlich alle Probleme sehen zu können, müssten deutlich mehr Bilder gezeigt werden, dafür ist allerdings in diesem Bericht kein Platz.

@@ -43,6 +43,8 @@ Hier wird in der ersten Hälfte des Netzwerks zwischen den \enquote{convolutiona
 und in der zweiten Hälfte das Bild zwischen den \enquote{convolutional} Lagen durch transponierte \enquote{convolutional} Lagen vergrößert (verdoppelte Kantenlänge).
 Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet.
 Ein Beispiel eines solchen \enquote{U-Net} ist in \autoref{fig:unet} dargestellt.
+
+Allerdings unterscheidet sich das verwendete Netzwerk in einigen Hyperparametern, wie z.B. die Filteranzahlen und die Pixelanzahlen.
 Außerdem wurde zwischen den beiden \enquote{convolutional} Lagen einer Ebene das Netzwerk mithilfe von \enquote{Dropout} regularisiert.
 Ein weiterer Unterschied zum dargestellten \enquote{U-Net} ist, dass bei den \enquote{convolutional} Lagen ein \enquote{Padding} von \enquote{same} statt \enquote{valid} verwendet wurde.
 
@@ -55,21 +57,23 @@ Der Optimierer \enquote{Adam} hat dabei die Verlustfunktion der binären Kreuzen
     \caption{Visualisierung eines \enquote{U-Net}, %
     wobei jede Box einem Mehrkanal-Bild entspricht. Die Anzahl an Kanäle ist über der Box angegeben und die Anzahl der Pixel ist neben der Box angegeben. %
     Jeder Pfeil entspricht der entsprechenden Operation.\cite{ronneberger2015unet}}
-    \label{fig:visual_model}
+    \label{fig:unet}
 \end{figure}
 
-Die besten Hyperparameter und die beste Struktur des Netzwerks wurde mithilfe einer zufälligen Suche ermittelt.
-Das Netzwerk wurde für 100 verschiedene Kombinationen der Hyperparameter auf einem kleinen Trainingsdatensatz von 3000 Satellitenbildern trainiert
+Die besten Hyperparameter und die beste Struktur des Netzwerks wurde mithilfe einer zufälligen Gittersuche ermittelt.
+Das Netzwerk wurde für 100 verschiedene Kombinationen der Hyperparameter auf einem kleinen Trainingsdatensatz von 3000 Satellitenbildern für 20 Epochen trainiert
 und dann auf einem kleinen Validierungsdatensatz von ebenfalls 3000 Satellitenbildern evaluiert.
-Das Ergebnis der Hyperparametersuche ist in \autoref{fig:grid_search} dargestellt.
+Das Ergebnis der Hyperparametersuche ist in \autoref{fig:grid_search} dargestellt und in \autoref{tab:grid_search} sind die besten fünf Kombinationen aufgelistet.
+Vor dieser systematischen Suche wurden weitere Hyperparameter variiert, allerdings erwies sich das zuvor beschriebene Neuronale Netzwerk als am besten geeignet
+und die systematischen Suche beschränkte sich auf die wichtigsten Parameter.
 Variiert wurden folgende Hyperparameter:
 
 \begin{itemize}
-    \item \enquote{filter\_start}: Anzahl der Filter der \enquote{convolutional} Lagen der ersten und letzten Ebene, wobei die Filter pro Ebene verdoppelt wurden
+    \item \enquote{filter\_start}: Anzahl der Filter der \enquote{convolutional} Lagen der obersten Ebene, wobei die Filter pro Ebene verdoppelt wurden
     \item \enquote{filter\_levels}: Anzahl der Ebenen
     \item \enquote{kernel\_size}: Größe der Faltungsmatrizen aller \enquote{convolutional} Lagen
     \item \enquote{kernel\_initializer}: Methode der Matrixinitialisierung aller \enquote{convolutional} Lagen
-    \item \enquote{dropout\_start}: Stärke des \enquote{Dropout} der ersten und letzten Ebene, wobei die Stärke jeweils nach zwei Ebenen um 0,1 erhöht wurde
+    \item \enquote{dropout\_start}: Stärke des \enquote{Dropout} der obersten Ebene, wobei die Stärke jeweils nach zwei Ebenen um 0,1 erhöht wurde
     \item \enquote{learning\_rate}: Lernrate des verwendeten Optimierers \enquote{Adam}
 \end{itemize}
 
@@ -80,41 +84,33 @@ Variiert wurden folgende Hyperparameter:
     \label{fig:grid_search}
 \end{figure}
 
-Vor dieser systematischen Suche wurden weitere Hyperparameter variiert, allerdings erwies sich das zuvor beschriebene Neuronale Netzwerk als am besten geeignet
-und die systematischen Suche beschränkte sich auf die wichtigsten Parameter.
-
-Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,3\% auf dem Validierungsdatensatz.
-Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Folgenden anhand der Visualisierung in \autoref{fig:visual_model} detailliert beschrieben.
-Die Aufzählungen im Folgenden sind in \autoref{fig:visual_model} von links nach rechts der entsprechenden Lage zugeordnet.
-
-\begin{figure}
+\begin{table}
     \centering
-    \includegraphics[width=0.6\textwidth]{images/visual_model.png}
-    \caption{Visualisierung des verwendeten Convolutional Neural Network}
-    \label{fig:visual_model}
-\end{figure}
+    \caption{Die besten fünf Ergebnisse der zufälligen Gittersuche mit der Genauigkeit auf den 3000 Testdaten und den zugehörigen Hyperparametern}
+    \label{tab:grid_search}
+    \begin{tabular}{c c c c c c c}
+        \toprule
+        Genauigkeit & \enquote{filter\_start} & \enquote{filter\_levels} & \enquote{kernel\_size} & \enquote{kernel\_initializer} & \enquote{dropout\_start} & \enquote{learning\_rate} \\
+        \midrule
+        0.913355 & 18 & 4 & 3 & he\_normal & 0.177895 & 0.003795 \\
+        0.913100 & 18 & 4 & 3 & glorot\_uniform & 0.100000 & 0.001000 \\
+        0.912037 & 16 & 4 & 3 & he\_normal & 0.247368 & 0.003000 \\
+        0.911288 & 32 & 4 & 3 & he\_normal & 0.086316 & 0.003179 \\
+        0.909450 & 22 & 6 & 3 & he\_normal & 0.100000 & 0.004000 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-\begin{itemize}
-    \item \enquote{InputLayer} Shape: (..., 128, 128, 3) 
-    \item \enquote{Conv2D}:
-    \item[-] Filter Anzahl: 18, 18, 36, 36, 72, 72, 144, 144, 72, 72, 36, 36, 18, 18, 1
-    \item[-] Kernel Größe: 3 x 3
-    \item[-] Kernel Initialisierungs-Methode: \enquote{he\_normal}
-    \item[-] Padding: \enquote{same} 
-    \item[-] Aktivierungsfunktion: ReLU (letzte: Sigmoid)
-    \item \enquote{Dropout} Stärke: 0.1779, 0.1779, 0.2779, 0.2779, 0.2779, 0.1779, 0.1779
-    \item \enquote{MaxPooling2D} Größe: 2 x 2
-    \item \enquote{Conv2DTranspose}:
-    \item[-] Filter Anzahl: 72, 36, 18
-    \item[-] Kernel Größe: 2 x 2
-    \item[-] Aktivierungsfunktion: keine
-    \item \enquote{Concatenate}: Verkettet Ausgabe vor \enquote{MaxPooling2D} mit Ausgabe nach \enquote{Conv2DTranspose} der gleichen Ebene
-    \item Verlustfunktion: binäre Kreuzentropie
-    \item \enquote{Adam}-Lernrate: 0.003795
-    \item \enquote{Batch}-Größe beim Training: 128
-\end{itemize}
+Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem Testdatensatz.
+Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Anhang anhand einer Visualisierung detailliert beschrieben. (siehe \autoref{fig:visual_model})
 
-Der Fortschritt während des Trainings ist in \autoref{fig:train_hist} dargestellt.
+Der Fortschritt während des Trainings der 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
+Hier lässt sich erkennen, dass das Modell etwas besser auf den Trainingsdaten abschneidet, aber eine Überanpassung ist dies nicht.
+Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und so unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
+und ein niedriger Dropout wie hier reicht für die Regularisierung aus.
+Die Hyperparametersuche zeigte auch, dass ein zu hoher Dropout nur zu schlechteren Ergebnissen führte.
+Die \enquote{Zackigkeit} der Kurven in \autoref{fig:train_hist} lässt sich dadurch erklären, dass eine \enquote{Batch}-Größe von 128 Bildern verwendet wurde und ein großer Teil des Trainings so gar nicht in den Plots zu erkennen ist.
+Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten nicht möglich.
 
 \begin{figure}
     \centering
@@ -134,13 +130,14 @@ Der Fortschritt während des Trainings ist in \autoref{fig:train_hist} dargestel
     \label{fig:train_hist}
 \end{figure}
 
-Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde ein die Genauigkeit auf dem Validierungsdatensatz
-für verschiedene Schwellwerte berechnet, ab denen ein Pixel als Wasser gewertet wird.
-Dies ist in \label{fig:threshold} dargestellt.
+Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde die Genauigkeit auf dem Validierungsdatensatz
+für verschiedene Schwellwerte berechnet, ab denen ein Pixel als Wasser gewertet wird und der beste Schwellwert wird verwendet.
+Hier ergab sich als bester Schwellwert 0,54.
+Dies ist in \autoref{fig:threshold} dargestellt.
 
 \begin{figure}
     \centering
-    \includegraphics[0.5\textwidth]{images/threshold.png}
+    \includegraphics[width=0.5\textwidth]{images/threshold.png}
     \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellwert}
     \label{fig:threshold}
 \end{figure}
@@ -148,7 +145,7 @@ Dies ist in \label{fig:threshold} dargestellt.
 \subsection{Alternativmethode: \enquote{Random Forest}}
 \label{ssec:Alternativmethode}
 
-Zum Vergleich mit dem Neuronalen Netzwerks wurde eine Pixelweise Klassifikation mithilfe eines \enquote{Random Forest} verwendet.
+Zum Vergleich mit dem Neuronalen Netzwerks wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} verwendet.
 Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet, allerdings wurde dies um das Framework \enquote{TensorFlow Decision Forests} erweitert.\cite{tfdf}
 Dieser \enquote{Random Forest} besteht aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 haben.
 
@@ -158,5 +155,5 @@ Dann wurde vom Satellitenbild und dem Bild der Gradienten ein Graustufen Bild er
 All diese 8 Attribute wurden dem \enquote{Random Forest} pixelweise übergeben.
 
 Aufgrund von Arbeitsspeicher- und Rechenzeit-Limitierungen konnte nicht der gesamte Trainingsdatensatz verwendet werden.
-Aus jedem Bild im Trainingsdatensatz wurden 25 zufällige Pixel verwendet und so wurde der \enquote{Random Forest} auf einer Millionen Pixel trainiert.
+Aus jedem Bild im Trainingsdatensatz wurden 25 zufällige Pixel verwendet und so wurde der \enquote{Random Forest} auf etwa einer Millionen Pixel trainiert.
 Der Validierungs- und Testdatensatz blieb jedoch gleich.
