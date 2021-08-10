@@ -8,6 +8,7 @@ In \autoref{tab:accuracy} sind alle erreichten Genauigkeiten aufgelistet.
     \centering
     \caption{Genauigkeit der verwendeten Methoden auf den verschiedenen Teildatensätzen, wobei mit CNN das Convolutional Neural Network gemeint ist}
     \label{tab:accuracy}
+    \resizebox*{0.8\textwidth}{!}{%
     \begin{tabular}{l c c c}
         \toprule 
         Methode & Trainingsdaten & Validierungsdaten & Testdaten \\ 
@@ -16,7 +17,8 @@ In \autoref{tab:accuracy} sind alle erreichten Genauigkeiten aufgelistet.
         CNN (bester Schwellwert 0,54) & 93,58\% & 93,07\% & 93,32\% \\
         Random Forest & 89,40\% & 89,09\% & 89,37\% \\
         \bottomrule
-    \end{tabular}
+    \end{tabular}%
+    }
 \end{table}
 
 Hier ist deutlich zu erkennen, dass beide von uns gewählten Methoden gute Ergebnisse erzielten, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielte.
@@ -47,21 +49,17 @@ Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradi
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{images/bsp_cnn.png}
-    \caption{Beispiele der Vorhersagen des Convolutional Neural Network. %
-    Aufgezeigt ist zu einem Satellitenbild die Maske aus dem Datensatz und %
-    die vorhergesagte Maske mit und ohne binärisierung über den Schwellwert. %
-    Außerdem sind die zugehörigen Länder aufgelistet.\\ \copyright Mapbox, \copyright OpenStreetMap}
+    \caption{Beispiele der Vorhersagen des Convolutional Neural Network mit und ohne Anwendung des Schwellwertes. %
+    \\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:beispiele_cnn}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{images/bsp_rndf.png}
-    \caption{Beispiele der Vorhersagen des Random Forest. %
-    Aufgezeigt ist zu einem Satellitenbild das Bild der Gradienten, %
-    die Maske aus dem Datensatz und %
-    die vorhergesagte Maske. %
-    Außerdem sind die zugehörigen Länder aufgelistet.\\ \copyright Mapbox, \copyright OpenStreetMap}
+    \caption{Beispiele der Vorhersagen des Random Forest und  %
+    das Bild der Gradienten des Satellitenbildes. %
+    \\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:beispiele_rndf}
 \end{figure}
 
@@ -91,7 +89,6 @@ bei denen die Segmentierung nicht gut funktionierte
 oder die gegebene Maske falsch war.
 Probleme waren z.B. Wolken, Ebbe und Flut, Felder, Sumpfgebiete, Schnee oder sonstige auch für den Menschen schwer zu erkennende Gewässer.
 Um tatsächlich alle Probleme sehen zu können, müssten deutlich mehr Bilder gezeigt werden, dies würde allerdings den Rahmen dieses Berichtes sprengen.
-
 Teilweise ist nicht erklärbar warum die Algorithmen Wasser falsch erkannten.
 Häufig entstanden Fehler an Stellen, die auch ein Mensch nicht erkennen könnte, aber manchmal wurden selbst eindeutige Kanten nicht richtig erkannt.
 Einige der Fehler waren sicherlich auf die niedrige Auflösung von 128x128 Pixel zurückzuführen, aber die meisten Gewässer waren auch mit dieser Auflösung klar zu erkennen.
