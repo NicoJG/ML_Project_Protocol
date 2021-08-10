@@ -4,9 +4,12 @@
 Die Ergebnisse beider verwendeten Methoden zur Segmentierung von Gewässern auf Satellitenbildern waren ausreichend
 und übertrafen teilweise unsere Erwartungen vor dem Projekt.
 Erst während dem Projekt erkannten wir, dass einige der Masken im Datensatz fehlerhaft sind.
-Auch erkannten wir, dass wenige der Satellitenbilder für eine Segmentierung unbrauchbar waren. (z.B. Bilder von Wolken)
+Auch erkannten wir, dass ein paar der Satellitenbilder für eine Segmentierung unbrauchbar waren. (z.B. Bilder von Wolken)
 Trotz der schlechten Daten, die zum Training benutzt wurden, wurden gute Ergebnisse erzielt 
 und die vorhergesagten Masken waren häufig besser als die Masken des Datensatzes.
+Die erzielten Genauigkeiten der Hauptmethode von etwa 93\% und der Alternativmethode von etwa 89\% lassen sich allerdings nicht näher beurteilen, 
+da nicht klar ist welche Genauigkeit die Masken im Datensatz erreichen.
+Hierfür wäre eine Manuelle Überprüfung notwendig.
 
 Der Vergleich des Convolutional Neural Network zum Random Forest zeigt deulich, dass für dieses Problem ersteres besser geeignet war.
 Zusätzlich zu den besseren Ergebnissen war das Convolutional Neural Network deutlich sparsamer mit der benötigten Rechenleistung 

@@ -21,10 +21,10 @@ Ein Beispiel vom erzeugten Datensatz ist in \autoref{fig:datensatz_beispiel} zu 
         \caption{Maskenbild}
         \label{fig:datensatz_beispiel_maske.png}
     \end{subfigure}
-    \caption{Beispiel des Datensatzes an den Koordinaten %
-            $x_\text{Tile} = 16998$, $y_\text{Tile} = 10927$, $z_\text{Tile} = 15$, %
-            $x_\text{Geo} = 6,751°$, $y_\text{Geo} = 51,293°$. %
-            (in Deutschland) \copyright Mapbox, \copyright OpenStreetMap}
+    \caption{\\Beispiel des Datensatzes an den Koordinaten %
+            ${x_\text{Tile} = 16998}$, ${y_\text{Tile} = 10927}$, ${z_\text{Tile} = 15}$, %
+            ${x_\text{Geo} = 6,751°}$, ${y_\text{Geo} = 51,293°}$. %
+            (in Deutschland) \\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:datensatz_beispiel}
 \end{figure}
 
@@ -33,7 +33,7 @@ Im Folgenden soll auf die Vorgensweise eingegangen werden.
 
 Die Daten wurden nicht in einer Sitzung sondern immer in kleinen Paketen gesammelt.
 Zuerst wurden gleichverteilte Zufallszahlen für Längengrad $x_\text{Geo}$ und Breitengrad $y_\text{Geo}$ (also in geographischen Koordinaten) 
-im Bereich $x_\text{Geo} \in [-10,49 \,,\, 40,27]$, $y_\text{Geo} \in [34,51 \,,\, 71,20]$ gezogen.
+im Bereich $x_\text{Geo} \in [-10,49° \,,\, 40,27°]$, $y_\text{Geo} \in [34,51° \,,\, 71,20°]$ gezogen.
 Dieser Bereich ist eine grobe Begrenzung für Europa.
 Für jeden so gezogenen Ort wurde mithilfe der groben Ländergrenzen des \enquote{Natural Earth Data} Projektes überprüft, 
 ob dieser Ort innerhalb eines europäischen Landes liegt. \cite{natural_earth_countries}
@@ -46,7 +46,7 @@ Ein Ort wurde nur dann akzeptiert, wenn dieser nicht doppelt gezogen wurde und d
 
 Für jeden akzeptierten Ort wurde dann mithilfe der \enquote{Mapbox Raster Tiles API} ein Satellitenbild heruntergeladen.\cite{mapbox_raster_tiles}
 Außerdem wurde mithilfe der \enquote{Mapbox Static Tiles API} und einem selbst angepassten Kartenstil von diesem Ort ein Maskenbild für den Wassergehalt heruntergeladen.\cite{mapbox_static_tiles}
-Mapbox verwendet für die Kartendaten von \enquote{OpenStreetMap} und somit stammen auch die Daten der Maskenbilder daher.\cite{OpenStreetMap}
+Mapbox verwendet für die Kartendaten \enquote{OpenStreetMap} und somit stammen auch die Daten der Maskenbilder daher.\cite{OpenStreetMap}
 
 An dieser Stelle scheint es sinnvoll zu erwähnen, dass die Maskenbilder teilweise Fehler enthalten und Gewässer nur sehr grob oder auch falsch zugeordnet sind. 
 
@@ -54,8 +54,8 @@ In der Bereitstellung von digitalen Karten und geographischen Daten wird heutzut
 Hier ist eine Zoom-Stufe $z_\text{Tile}$ anzugeben und die Welt wird in $4^{z_\text{Tile}}$ gleichgroße Quadrate(\enquote{Tiles}) aufgeteilt.
 Jedem dieser Quadrate wird eine $x_\text{Tile}$- und eine $y_\text{Tile}$-Koordinate zugeordnet.
 
-Während der Erstellung des Datensatzes musste zwischen einigen Koordinatensystemen gewechselt werden, aber die Koordinaten der \enquote{Tiles} sind ausschlaggebend für die heruntergeladenen Bilder.
+Während der Erstellung des Datensatzes musste zwischen einigen Koordinatensystemen gewechselt werden, aber die Koordinaten der \enquote{Tiles} waren ausschlaggebend für die heruntergeladenen Bilder.
 Jedes Bild im Datensatz wurde mit einer Zoom-Stufe $z_\text{Tile} = 15$ generiert und entspricht genau einem \enquote{Tile}.
 
-Der Datensatz enthielt am Ende des Projektes $57931$ Satellitenbilder und dazu passende Maskenbilder.
-Und jedes Bild hatte eine Auflösung von $256 \times 256$ Pixel.
+Der Datensatz enthielt am Ende des Projektes 57931 Satellitenbilder und dazu passende Maskenbilder.
+Jedes Bild hatte eine Auflösung von 256 x 256 Pixel.
