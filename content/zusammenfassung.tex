@@ -1,6 +1,21 @@
 \section{Zusammenfassung}
 \label{sec:Zusammenfassung}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+Die Ergebnisse beider verwendeten Methoden zur Segmentierung von Gewässern auf Satellitenbildern waren ausreichend
+und übertrafen teilweise unsere Erwartungen vor dem Projekt.
+Erst während dem Projekt erkannten wir, dass einige der Masken im Datensatz fehlerhaft sind.
+Auch erkannten wir, dass wenige der Satellitenbilder für eine Segmentierung unbrauchbar waren. (z.B. Bilder von Wolken)
+Trotz der schlechten Daten, die zum Training benutzt wurden, wurden gute Ergebnisse erzielt 
+und die vorhergesagten Masken waren häufig besser als die Masken des Datensatzes.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+Der Vergleich des Convolutional Neural Network zum Random Forest zeigt deulich, dass für dieses Problem ersteres besser geeignet war.
+Zusätzlich zu den besseren Ergebnissen war das Convolutional Neural Network deutlich sparsamer mit der benötigten Rechenleistung 
+und sogar die Vorhersagen gingen deutlich schneller als bei dem Random Forest.
+Auch ist zu sehen, dass ein Convolutional Neural Network Beziehungen zwischen den Pixeln auswertet, was bei einem Random Forest nicht möglich ist.
+
+Sicherlich ist das verwendete Modell nicht perfekt, aber es zeigt, dass ein so komplexes und vielseitiges Problem 
+wie die Wassererkennung auf Satellitenbildern mit Deep Learning gelöst werden kann.
+Eine Überwachung der Ausgabe von Neuronalen Netzen durch Menschen ist allerdings noch zu empfehlen.
+
+Abschließend sei zu sagen, dass dieses Projekt uns den Umgang mit Deep Learning weiter nahegebracht hat 
+und gezeigt hat wie vielseitig einsetzbar Neuronale Netzwerke sind.

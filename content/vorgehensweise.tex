@@ -88,6 +88,7 @@ Variiert wurden folgende Hyperparameter:
     \centering
     \caption{Die besten fünf Ergebnisse der zufälligen Gittersuche mit der Genauigkeit auf den 3000 Testdaten und den zugehörigen Hyperparametern}
     \label{tab:grid_search}
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{c c c c c c c}
         \toprule
         Genauigkeit & \enquote{filter\_start} & \enquote{filter\_levels} & \enquote{kernel\_size} & \enquote{kernel\_initializer} & \enquote{dropout\_start} & \enquote{learning\_rate} \\
@@ -98,7 +99,8 @@ Variiert wurden folgende Hyperparameter:
         0.911288 & 32 & 4 & 3 & he\_normal & 0.086316 & 0.003179 \\
         0.909450 & 22 & 6 & 3 & he\_normal & 0.100000 & 0.004000 \\
         \bottomrule
-    \end{tabular}
+    \end{tabular}%
+    }
 \end{table}
 
 Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem Testdatensatz.

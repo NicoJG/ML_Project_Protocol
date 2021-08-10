@@ -6,37 +6,38 @@ In \autoref{tab:accuracy} sind alle erreichten Genauigkeiten aufgelistet.
 
 \begin{table}
     \centering
-    \caption{Genauigkeit der verwendeten Methoden auf den verschiedenen Teildatensätzen}
+    \caption{Genauigkeit der verwendeten Methoden auf den verschiedenen Teildatensätzen, wobei mit CNN das Convolutional Neural Network gemeint ist}
     \label{tab:accuracy}
     \begin{tabular}{l c c c}
         \toprule 
         Methode & Trainingsdaten & Validierungsdaten & Testdaten \\ 
         \midrule 
-        Convolutional Neural Network \\ (standard Schwellwert 0,50) & 93,56\% & 93,05\% & 93,30\% \\
-        Convolutional Neural Network \\ (bester Schwellwert 0,54) & 93,58\% & 93,07\% & 93,32\% \\
+        CNN (standard Schwellwert 0,50) & 93,56\% & 93,05\% & 93,30\% \\
+        CNN (bester Schwellwert 0,54) & 93,58\% & 93,07\% & 93,32\% \\
         Random Forest & 89,40\% & 89,09\% & 89,37\% \\
         \bottomrule
     \end{tabular}
 \end{table}
 
 Hier ist deutlich zu erkennen, dass beide von uns gewählten Methoden gute Ergebnisse erzielt haben, jedoch die Hauptmethode eine deutlich höhere Genauigkeit erzielt.
-Eine genauere Aussage über die Ergebnisse lässt sich über eine Konfusionsmatrix treffen. Diese ist in \autoref{fig:confusiomatrix} dargestellt.
+Eine genauere Aussage über die Ergebnisse lässt sich über eine Konfusionsmatrix treffen. Diese ist in \autoref{fig:confusionmatrix} dargestellt.
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/cm_cnn.png}
         \caption{Hauptmethode}
         \label{fig:cm_cnn}
     \end{subfigure}
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/cm_rndf.png}
         \caption{Alternativmethode}
         \label{fig:cm_rndf}
     \end{subfigure}
     \caption{Konfusionsmatrizen der Vorhersagen der verwendeten Methoden auf dem Testdatensatz}
+    \label{fig:confusionmatrix}
 \end{figure}
 
 Um die Methoden allerdings tatsächlich evaluieren zu können ist es notwendig einige Beispiele der vorhergesagten Masken zu betrachten.
@@ -45,7 +46,7 @@ Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradi
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/bsp_cnn.png}
+    \includegraphics[width=0.7\textwidth]{images/bsp_cnn.png}
     \caption{Beispiele der Vorhersagen des Convolutional Neural Network. %
     Aufgezeigt ist zu einem Satellitenbild die Maske aus dem Datensatz und %
     die vorhergesagte Maske mit und ohne binärisierung über den Schwellwert. %
@@ -55,7 +56,7 @@ Außerdem ist in \autoref{fig:beispiele_rndf} die zusätzliche Eingabe des Gradi
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/bsp_rndf.png}
+    \includegraphics[width=0.7\textwidth]{images/bsp_rndf.png}
     \caption{Beispiele der Vorhersagen des Random Forest. %
     Aufgezeigt ist zu einem Satellitenbild das Bild der Gradienten, %
     die Maske aus dem Datensatz und %
@@ -73,7 +74,7 @@ Weitere Beispiele sind im Anhang in \autoref{fig:bsp} und in \autoref{fig:bsp_ba
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/vergleich.png}
+    \includegraphics[width=0.7\textwidth]{images/vergleich.png}
     \caption{Beispiele zum Vergleich der Hauptmethode zur Alternativmethode.\\ \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:vergleich}
 \end{figure}
@@ -88,3 +89,7 @@ bei denen die Segmentierung nicht gut funktioniert hat
 oder die gegebene Maske auch falsch ist.
 Probleme sind z.B. Wolken, Ebbe und Flut, Felder, Sumpfgebiete oder sonstige auch für den Menschen schwer zu erkennende Gewässer.
 Um tatsächlich alle Probleme sehen zu können, müssten deutlich mehr Bilder gezeigt werden, dafür ist allerdings in diesem Bericht kein Platz.
+
+Teilweise ist nicht erklärbar warum die Algorithmen Wasser falsch erkennen.
+Häufig entstehen Fehler an Stellen, die auch ein Mensch nicht erkennen könnte, aber manchmal werden eindeutige Kanten nicht erkannt.
+Einige der Fehler sind sicherlich auf die niedrige Auflösung von 128x128 Pixel zurückzuführen, aber die meisten Gewässer waren auch mit dieser Auflösung zu erkennen.
