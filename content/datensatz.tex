@@ -3,7 +3,7 @@
 
 Da kein passender Datensatz gefunden wurde, musste dieser auch als Teil des Projekts erstellt werden.
 Das Ziel war es für viele verschiedene Orte innerhalb europäischer Grenzen ein Satellitenbild und eine passende Maske zu sammeln.
-Die Maske soll dabei die Pixel markieren, die zu größeren Wasserflächen wie Seen, Teichen, Flüssen, Kanälen oder Küsten vom Meer gehören.
+Die Maske soll dabei die Pixel markieren, die zu größeren Wasserflächen wie Seen, Teichen, Flüssen, Kanälen oder Küstenabschnitten gehören.
 Zusätzlich werden zu jedem Ort einige Metadaten wie die Koordinaten und das zugehörige Land in einer CSV Datei gespeichert.
 Ein Beispiel vom erzeugten Datensatz ist in \autoref{fig:datensatz_beispiel} zu sehen.
 
@@ -30,22 +30,22 @@ Ein Beispiel vom erzeugten Datensatz ist in \autoref{fig:datensatz_beispiel} zu 
 
 Die Datensatz-Erstellung wurde mit Python automatisiert und wird im Folgenden erläutert.
 
-Die Daten wurden nicht in einer Sitzung sondern immer in kleinen Paketen gesammelt.
+Die Daten wurden nicht in einer Sitzung, sondern immer in kleinen Paketen gesammelt.
 Dafür wurden zuerst gleichverteilte Zufallszahlen für Längengrad $x_\text{Geo}$ und Breitengrad $y_\text{Geo}$ (also in geographischen Koordinaten) 
 im Bereich ${x_\text{Geo} \in [-10,49° \,,\, 40,27°]}$, ${y_\text{Geo} \in [34,51° \,,\, 71,20°]}$ gezogen.
 Dieser Bereich ist eine grobe Begrenzung für Europa.
-Für jeden so gezogenen Ort wurde mithilfe der groben Ländergrenzen des \enquote{Natural Earth Data} Projektes überprüft, 
-ob dieser Ort innerhalb eines europäischen Landes liegt. \cite{natural_earth_countries}
+Für jeden so gezogenen Ort wurde mithilfe der groben Ländergrenzen\footnote{\url{https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/}} des \enquote{Natural Earth} Projektes überprüft, 
+ob dieser Ort innerhalb eines europäischen Landes liegt. \cite{natural_earth}
 Hierbei wurden Russland und Island nicht miteinbezogen.
 
 Ziel war es viele Satellitenbilder zu sammeln, die Wasser enthalten.
 Da in Europa allerdings das Verhältnis von Wasser- zu Landfläche sehr gering ist, musste vor dem Herunterladen der Wassergehalt des Bildes überprüft werden.
-Dies wurde mithilfe der Daten der \enquote{Mapbox Vector Tiles API} überprüft. \cite{mapbox_vector_tiles}
-Ein Ort wurde nur dann akzeptiert, wenn dieser nicht schon zuvor gezogen wurde und das Bild Wasser, aber auch nicht nur Wasser enthält.
+Dies wurde mithilfe der Daten der \enquote{Mapbox Vector Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/vector-tiles/}} überprüft. \cite{mapbox}
+Ein Ort wurde nur dann akzeptiert, wenn dieser nicht schon zuvor gezogen wurde und das Bild sowohl einen Wasseranteil als auch einen Landanteil hat.
 
-Für jeden akzeptierten Ort wurde dann mithilfe der \enquote{Mapbox Raster Tiles API} ein Satellitenbild heruntergeladen.\cite{mapbox_raster_tiles}
-Außerdem wurde von diesem Ort mithilfe der \enquote{Mapbox Static Tiles API} und einem selbst angepassten Kartenstil ein Maskenbild für den Wassergehalt heruntergeladen.\cite{mapbox_static_tiles}
-Mapbox verwendet für die Kartendaten \enquote{OpenStreetMap} und somit stammen auch die Daten der Maskenbilder daher.\cite{OpenStreetMap}
+Für jeden akzeptierten Ort wurde dann mithilfe der \enquote{Mapbox Raster Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/raster-tiles/}} ein Satellitenbild heruntergeladen.
+Außerdem wurde von diesem Ort mithilfe der \enquote{Mapbox Static Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/static-tiles/}} und einem selbst angepassten Kartenstil ein Maskenbild für den Wassergehalt heruntergeladen.\cite{mapbox}
+Mapbox verwendet die Kartendaten von \enquote{OpenStreetMap} und somit stammen auch die Daten der Maskenbilder daher.\cite{OpenStreetMap}
 
 An dieser Stelle scheint es sinnvoll zu erwähnen, dass die Maskenbilder teilweise Fehler enthalten und Gewässer nur sehr grob oder auch falsch zugeordnet sind. 
 

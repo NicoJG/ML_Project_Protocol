@@ -6,7 +6,7 @@ Dazu wurden zwei Methoden des maschinellen Lernens für die Segmentierung verwen
 Ein \enquote{Convolutional Neural Network} stellte dabei die Hauptmethode dar 
 und ein \enquote{Random Forest} stellte dabei eine Alternativmethode zum Vergleich dar.
 Für beide Methoden wurde das Framework \enquote{TensorFlow} verwendet.\cite{tensorflow}
-Die Metrik, die benutzt wurde um die Methoden zu evaluieren, war die Genauigkeit(zu englisch \enquote{accuracy}), 
+Die Metrik, die benutzt wurde, um die Methoden zu evaluieren, war die Genauigkeit (zu Englisch \enquote{accuracy}), 
 also der Anteil der richtig zugeordneten Pixel.
 
 \subsection{Vorverarbeitung}
@@ -41,13 +41,14 @@ Dafür wurde eine \enquote{Batch}-Größe von 128 Satellitenbildern verwendet.
 \subsection{Hauptmethode: \enquote{Convolutional Neural Network}}
 \label{ssec:Hauptmethode}
 
-Das verwendete Neuronale Netzwerk ist vollständig \enquote{convolutional} und orientiert sich an der häufig für Segmentierung verwendeten \enquote{U-Net}-Struktur.\cite{ronneberger2015unet}
+Das verwendete neuronale Netzwerk ist vollständig \enquote{convolutional} und orientiert sich an der häufig für Segmentierung verwendeten \enquote{U-Net}-Struktur.\cite{ronneberger2015unet}
 Ein Beispiel eines solchen \enquote{U-Net} ist in \autoref{fig:unet} dargestellt.
 Hier wird in der ersten Hälfte des Netzwerks zwischen den \enquote{convolutional} Lagen das Bild durch \enquote{maximales Pooling} verkleinert (halbierte Kantenlänge) 
 und in der zweiten Hälfte das Bild zwischen den \enquote{convolutional} Lagen durch transponiert-\enquote{convolutional} Lagen vergrößert (verdoppelte Kantenlänge).
-Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet.
+Zusätzlich wird die Ausgabe vor dem Verkleinern kopiert und mit der Ausgabe nach dem Vergrößern verkettet. 
+Dadurch entsteht die charakteristische U-Form, dargestellt mit mehreren Ebenen in der Höhe.
 
-Allerdings unterscheidet sich das verwendete Netzwerk in einigen Hyperparametern, wie z.B. den Filteranzahlen und den Pixelanzahlen zu dem gezeigten \enquote{U-Net}.
+Allerdings unterscheidet sich das verwendete Netzwerk in einigen Hyperparametern, wie z.B. den Filteranzahlen, den Pixelanzahlen und der Tiefe zu dem gezeigten \enquote{U-Net}.
 Außerdem wurde zwischen den beiden \enquote{convolutional} Lagen einer Ebene das Netzwerk mithilfe von \enquote{Dropout} regularisiert.
 Ein weiterer Unterschied ist, dass bei den \enquote{convolutional} Lagen ein \enquote{Padding} von \enquote{same} statt \enquote{valid} verwendet wurde.
 
@@ -67,11 +68,12 @@ Die besten Hyperparameter und die beste Struktur des Netzwerks wurde mithilfe ei
 Das Netzwerk wurde für 100 verschiedene Kombinationen der Hyperparameter auf einem kleinen Trainingsdatensatz von 3000 Satellitenbildern für 20 Epochen trainiert
 und dann auf einem kleinen Validierungsdatensatz von ebenfalls 3000 Satellitenbildern evaluiert.
 Das Ergebnis der Hyperparametersuche ist in \autoref{fig:grid_search} dargestellt und in \autoref{tab:grid_search} sind die besten fünf Kombinationen aufgelistet.
-Vor dieser systematischen Suche wurden weitere Hyperparameter variiert, allerdings erwies sich das zuvor beschriebene Neuronale Netzwerk als am besten geeignet
-und die systematischen Suche beschränkte sich auf die wichtigsten Parameter.
+Vor dieser systematischen Suche wurden weitere Hyperparameter variiert, allerdings erwies sich das zuvor beschriebene neuronale Netzwerk als am besten geeignet
+und die systematische Suche beschränkte sich auf die wichtigsten Parameter.
 Variiert wurden folgende Hyperparameter:
-
+ 
 \begin{itemize}
+    \setlength\itemsep{-0.5em}
     \item \enquote{filter\_start}: Anzahl der Filter der \enquote{convolutional} Lagen der obersten Ebene, wobei die Filter pro Ebene verdoppelt wurden
     \item \enquote{filter\_levels}: Anzahl der Ebenen
     \item \enquote{kernel\_size}: Größe der Faltungsmatrizen aller \enquote{convolutional} Lagen
@@ -83,7 +85,7 @@ Variiert wurden folgende Hyperparameter:
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{images/grid_search.png}
-    \caption{Zufällige Suche der besten Hyperparameter}
+    \caption{Zufällige Suche nach den besten Hyperparametern}
     \label{fig:grid_search}
 \end{figure}
 
@@ -106,10 +108,14 @@ Variiert wurden folgende Hyperparameter:
     }
 \end{table}
 
+Erkennbar sind Trends in \enquote{dropout\_start} und \enquote{learning\_rate} zu niedrigen Werten.
+Die Parameter \enquote{kernel\_size}=3 und \enquote{filter\_levels}=4 scheinen ebenfalls gut zu sein.
+\enquote{filter\_start} und \enquote{kernel\_initializer} zeigen keine deutlichen Trends.
 Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem kleinen Testdatensatz.
 Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Anhang anhand einer Visualisierung detailliert beschrieben. (siehe \autoref{fig:visual_model})
 
-Das Modell wurde mehrfach auf dem Trainingsdatensatz trainiert und der beste Durchlauf nach 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
+Das Modell wurde mehrfach auf dem Trainingsdatensatz trainiert. 
+Der beste Durchlauf nach 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
 Hier ist zu erkennen, dass das Modell etwas besser auf den Trainingsdaten abschnitt, allerdings ist nicht von einer Überanpassung auszugehen.
 Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und vielen deutlich unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
 und ein niedriger \enquote{Dropout} wie hier reicht für die Regularisierung aus.
@@ -136,21 +142,21 @@ Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten n
 \end{figure}
 
 Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde die Genauigkeit auf dem Validierungsdatensatz
-für verschiedene Schwellwerte, ab denen ein Pixel als Wasser gewertet wird, berechnet und der beste Schwellwert wurde verwendet.
-Hier ergab sich als bester Schwellwert 0,54.
+für verschiedene Schwellenwerte, ab denen ein Pixel als Wasser gewertet wird, berechnet und der beste Schwellenwert wurde verwendet.
+Hier ergab sich als bester Schwellenwert 0,54.
 Dies ist in \autoref{fig:threshold} dargestellt.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.4\textwidth]{images/threshold.png}
-    \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellwert}
+    \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellenwert}
     \label{fig:threshold}
 \end{figure}
 
 \subsection{Alternativmethode: \enquote{Random Forest}}
 \label{ssec:Alternativmethode}
 
-Zum Vergleich mit dem Neuronalen Netzwerk wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} durchgeführt.
+Zum Vergleich mit dem neuronalen Netzwerk wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} durchgeführt.
 Dieser \enquote{Random Forest} bestand aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 hatten.
 Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet.\cite{tfdf}
 
