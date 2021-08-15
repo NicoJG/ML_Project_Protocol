@@ -24,7 +24,7 @@ Ein Beispiel vom erzeugten Datensatz ist in \autoref{fig:datensatz_beispiel} zu 
     \caption{\\Beispiel des Datensatzes an den Koordinaten %
             ${x_\text{Tile} = 16998}$, ${y_\text{Tile} = 10927}$, ${z_\text{Tile} = 15}$, %
             ${x_\text{Geo} = 6,751°}$, ${y_\text{Geo} = 51,293°}$. %
-            (in Deutschland) \\ \copyright Mapbox, \copyright OpenStreetMap}
+            (in Deutschland) \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:datensatz_beispiel}
 \end{figure}
 
@@ -40,11 +40,11 @@ Hierbei wurden Russland und Island nicht miteinbezogen.
 
 Ziel war es viele Satellitenbilder zu sammeln, die Wasser enthalten.
 Da in Europa allerdings das Verhältnis von Wasser- zu Landfläche sehr gering ist, musste vor dem Herunterladen der Wassergehalt des Bildes überprüft werden.
-Dies wurde mithilfe der Daten der \enquote{Mapbox Vector Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/vector-tiles/}} überprüft. \cite{mapbox}
+Dies wurde mithilfe der Daten der \enquote{Mapbox Vector Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/}\label{mapbox_api}} überprüft. \cite{mapbox}
 Ein Ort wurde nur dann akzeptiert, wenn dieser nicht schon zuvor gezogen wurde und das Bild sowohl einen Wasseranteil als auch einen Landanteil hat.
 
-Für jeden akzeptierten Ort wurde dann mithilfe der \enquote{Mapbox Raster Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/raster-tiles/}} ein Satellitenbild heruntergeladen.
-Außerdem wurde von diesem Ort mithilfe der \enquote{Mapbox Static Tiles API}\footnote{\url{https://docs.mapbox.com/api/maps/static-tiles/}} und einem selbst angepassten Kartenstil ein Maskenbild für den Wassergehalt heruntergeladen.\cite{mapbox}
+Für jeden akzeptierten Ort wurde dann mithilfe der \enquote{Mapbox Raster Tiles API}\footref{mapbox_api} ein Satellitenbild heruntergeladen.
+Außerdem wurde von diesem Ort mithilfe der \enquote{Mapbox Static Tiles API}\footref{mapbox_api} und einem selbst angepassten Kartenstil ein Maskenbild für den Wassergehalt heruntergeladen.\cite{mapbox}
 Mapbox verwendet die Kartendaten von \enquote{OpenStreetMap} und somit stammen auch die Daten der Maskenbilder daher.\cite{OpenStreetMap}
 
 An dieser Stelle scheint es sinnvoll zu erwähnen, dass die Maskenbilder teilweise Fehler enthalten und Gewässer nur sehr grob oder auch falsch zugeordnet sind. 

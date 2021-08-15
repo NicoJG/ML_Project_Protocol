@@ -58,9 +58,7 @@ Der Optimierer \enquote{Adam} hat dabei die Verlustfunktion der binären Kreuzen
 \begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{images/unet.png}
-    \caption{Visualisierung eines \enquote{U-Net}, %
-    wobei jede Box einem Mehrkanal-Bild entspricht. Die Anzahl an Kanäle ist über der Box angegeben und die Anzahl der Pixel ist neben der Box angegeben. %
-    Jeder Pfeil entspricht der entsprechenden Operation.\cite{ronneberger2015unet}}
+    \caption{Visualisierung eines \enquote{U-Net}.\cite{ronneberger2015unet}}
     \label{fig:unet}
 \end{figure}
 
@@ -114,15 +112,6 @@ Die Parameter \enquote{kernel\_size}=3 und \enquote{filter\_levels}=4 scheinen e
 Aus der Suche ergab sich eine Kombination mit der besten Genauigkeit von 91,33\% auf dem kleinen Testdatensatz.
 Das dadurch entstandene Netzwerk wurde dann für den gesamten Datensatz verwendet und wird im Anhang anhand einer Visualisierung detailliert beschrieben. (siehe \autoref{fig:visual_model})
 
-Das Modell wurde mehrfach auf dem Trainingsdatensatz trainiert. 
-Der beste Durchlauf nach 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
-Hier ist zu erkennen, dass das Modell etwas besser auf den Trainingsdaten abschnitt, allerdings ist nicht von einer Überanpassung auszugehen.
-Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und vielen deutlich unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
-und ein niedriger \enquote{Dropout} wie hier reicht für die Regularisierung aus.
-Die Hyperparametersuche zeigte auch, dass ein zu hoher Dropout nur zu schlechteren Ergebnissen führte.
-Die \enquote{Zackigkeit} der Kurven in \autoref{fig:train_hist} lässt sich dadurch erklären, dass eine \enquote{Batch}-Größe von 128 Bildern verwendet wurde und ein großer Teil des Trainings so gar nicht in den Plots zu erkennen ist.
-Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten nicht möglich.
-
 \begin{figure}
     \centering
     \begin{subfigure}{0.45\textwidth}
@@ -141,17 +130,29 @@ Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten n
     \label{fig:train_hist}
 \end{figure}
 
+Das Modell wurde mehrfach auf dem Trainingsdatensatz trainiert. 
+Der beste Durchlauf nach 50 Epochen ist in \autoref{fig:train_hist} dargestellt.
+Hier ist zu erkennen, dass das Modell etwas besser auf den Trainingsdaten abschnitt, allerdings ist nicht von einer Überanpassung auszugehen.
+Bei fast 40000 Bildern mit einer Auflösung von 128 x 128 Pixel und vielen deutlich unterschiedlichen Bildern ist eine Überanpassung nicht möglich 
+und ein niedriger \enquote{Dropout} wie hier reicht für die Regularisierung aus.
+Die Hyperparametersuche zeigte auch, dass ein zu hoher Dropout nur zu schlechteren Ergebnissen führte.
+Die \enquote{Zackigkeit} der Kurven in \autoref{fig:train_hist} lässt sich dadurch erklären, dass eine \enquote{Batch}-Größe von 128 Bildern verwendet wurde und ein großer Teil des Trainings so gar nicht in den Plots zu erkennen ist.
+Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten nicht möglich.
+
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/threshold.png}
+    \captionsetup{format=plain}
+    \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellenwert}
+    \label{fig:threshold}
+\end{wrapfigure}
+
 Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wurde die Genauigkeit auf dem Validierungsdatensatz
 für verschiedene Schwellenwerte, ab denen ein Pixel als Wasser gewertet wird, berechnet und der beste Schwellenwert wurde verwendet.
 Hier ergab sich als bester Schwellenwert 0,54.
 Dies ist in \autoref{fig:threshold} dargestellt.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.4\textwidth]{images/threshold.png}
-    \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellenwert}
-    \label{fig:threshold}
-\end{figure}
+\FloatBarrier
 
 \subsection{Alternativmethode: \enquote{Random Forest}}
 \label{ssec:Alternativmethode}
