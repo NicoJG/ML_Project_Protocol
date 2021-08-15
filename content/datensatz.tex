@@ -21,10 +21,10 @@ Ein Beispiel vom erzeugten Datensatz ist in \autoref{fig:datensatz_beispiel} zu 
         \caption{Maskenbild}
         \label{fig:datensatz_beispiel_maske.png}
     \end{subfigure}
-    \caption{\\Beispiel des Datensatzes an den Koordinaten %
+    \caption{Beispiel des Datensatzes an den Koordinaten (in Deutschland)\\%
             ${x_\text{Tile} = 16998}$, ${y_\text{Tile} = 10927}$, ${z_\text{Tile} = 15}$, %
             ${x_\text{Geo} = 6,751°}$, ${y_\text{Geo} = 51,293°}$. %
-            (in Deutschland) \copyright Mapbox, \copyright OpenStreetMap}
+            \copyright Mapbox, \copyright OpenStreetMap}
     \label{fig:datensatz_beispiel}
 \end{figure}
 
@@ -34,7 +34,7 @@ Die Daten wurden nicht in einer Sitzung, sondern immer in kleinen Paketen gesamm
 Dafür wurden zuerst gleichverteilte Zufallszahlen für Längengrad $x_\text{Geo}$ und Breitengrad $y_\text{Geo}$ (also in geographischen Koordinaten) 
 im Bereich ${x_\text{Geo} \in [-10,49° \,,\, 40,27°]}$, ${y_\text{Geo} \in [34,51° \,,\, 71,20°]}$ gezogen.
 Dieser Bereich ist eine grobe Begrenzung für Europa.
-Für jeden so gezogenen Ort wurde mithilfe der groben Ländergrenzen\footnote{\url{https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/}} des \enquote{Natural Earth} Projektes überprüft, 
+Für jeden so gezogenen Ort wurde mithilfe der groben Ländergrenzen\footnote{\mbox{\url{https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/}}} des \enquote{Natural Earth} Projektes überprüft, 
 ob dieser Ort innerhalb eines europäischen Landes liegt. \cite{natural_earth}
 Hierbei wurden Russland und Island nicht miteinbezogen.
 

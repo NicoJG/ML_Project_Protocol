@@ -123,3 +123,13 @@
 
 % Trennung von Wörtern mit Strichen
 \usepackage[shortcuts]{extdash}
+
+\DeclareFieldFormat{formaturl}{\newline #1}
+
+\renewbibmacro*{url+urldate}{%
+  \printtext[formaturl]{%
+    \printfield{url}}%
+    \iffieldundef{urlyear}
+      {}
+      {\setunit*{\addspace}%
+      \printtext[urldate]{\printurldate}}}

@@ -139,12 +139,12 @@ Die Hyperparametersuche zeigte auch, dass ein zu hoher Dropout nur zu schlechter
 Die \enquote{Zackigkeit} der Kurven in \autoref{fig:train_hist} lässt sich dadurch erklären, dass eine \enquote{Batch}-Größe von 128 Bildern verwendet wurde und ein großer Teil des Trainings so gar nicht in den Plots zu erkennen ist.
 Eine Erhöhung der Epochenanzahl war aufgrund von fehlenden Rechenkapazitäten nicht möglich.
 
-
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
     \includegraphics[width=0.4\textwidth]{images/threshold.png}
     \captionsetup{format=plain}
     \caption{Plot der Genauigkeit auf dem Validierungsdatensatz gegen den Schwellenwert}
+    \vspace{-20pt}
     \label{fig:threshold}
 \end{wrapfigure}
 
@@ -152,13 +152,14 @@ Da die Pixel der Ausgabebilder des Netzwerks Werte zwischen 0 und 1 annimmt, wur
 für verschiedene Schwellenwerte, ab denen ein Pixel als Wasser gewertet wird, berechnet und der beste Schwellenwert wurde verwendet.
 Hier ergab sich als bester Schwellenwert 0,54.
 Dies ist in \autoref{fig:threshold} dargestellt.
+\FloatBarrier
 
 \subsection{\mbox{Alternativmethode: \enquote{Random Forest}}}
 \label{ssec:Alternativmethode}
 
 Zum Vergleich mit dem neuronalen Netzwerk wurde eine pixelweise Klassifizierung mithilfe eines \enquote{Random Forest} durchgeführt.
 Dieser \enquote{Random Forest} bestand aus 60 Entscheidungsbäumen, die eine maximale Tiefe von 32 hatten.
-Auch hierfür wurde das Framework \enquote{TensorFlow} verwendet.\cite{tfdf}
+Auch hierfür wurde das Framework \enquote{TensorFlow}\footnote{\url{https://www.tensorflow.org/decision_forests/}} verwendet.\cite{tensorflow}
 
 Hierfür wurden zunächst jedem Pixel der Satellitenbilder einige Attribute extrahiert.
 Auf jedem Farbkanal wurde der Betrag des Gradienten berechnet.
